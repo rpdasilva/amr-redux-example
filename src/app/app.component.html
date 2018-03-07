@@ -1,2 +1,34 @@
+<input #todoById>
+<button (click)="setCurrentTodo(todoById.value)">Set current Todo</button>
+<div>
+  {{ (currentTodo$ | async)?.title }}
+  {{ (currentTodo$ | async)?.description }}
+</div>
+
+<hr>
+
+<ul>
+  <input #title>
+  <input #description>
+  <button (click)="createTodo(title.value, description.value)">Add Todo</button>
+  <br>
+  <li *ngFor="let todo of todos$ | async"
+    [style.text-decoration]="todo.isComplete ? 'line-through' : ''">
+    {{ todo.title }} |
+    {{ todo.description }}
+    <button (click)="completeTodo(todo.id)">Complete</button>
+    <button (click)="removeTodo(todo.id)">Delete</button>
+  </li>
+</ul>
+
+<hr>
+
+<h1>Count is: {{ count$ | async }}</h1>
+<button (click)="incrementCount()">Increment</button> |
+<button (click)="decrementCount()">Decrement</button> |
+<input #countInput>
+<button (click)="setCount(countInput.value)">Set Count</button>
+
+<hr>
 <amr-input></amr-input>
 <amr-button>I'm a button</amr-button>
