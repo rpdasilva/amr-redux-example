@@ -1,8 +1,10 @@
 <input #todoById>
-<button (click)="setCurrentTodo(todoById.value)">Set current Todo</button>
-<div>
-  {{ (currentTodo$ | async)?.title }}
-  {{ (currentTodo$ | async)?.description }}
+<button (click)="selectTodo(todoById.value)">Set current Todo</button>
+<div *ngIf="selectedTodo$ | async as todo"
+  [style.text-decoration]="todo.isComplete ? 'line-through' : ''">
+  {{ todo.title }}
+  {{ todo.description }}
+  <button (click)="completeTodo(todo.id)">Complete</button>
 </div>
 
 <hr>
