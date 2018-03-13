@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/combineLatest';
 import 'rxjs/add/operator/map';
 
 import { incrementCount, decrementCount, setCount } from './state/counter/counter.actions';
 import { getCount } from './state/counter/counter.selectors';
-import { getTodos } from './state/todos/todos.selectors';
-import { createTodo, addTodo, removeTodo, completeTodo } from './state/todos/todos.actions';
+import { getTodos, getSelectedTodo, getSelectedTodoId } from './state/todos/todos.selectors';
+import { createTodo, addTodo, removeTodo, completeTodo, selectTodo } from './state/todos/todos.actions';
 
 @Component({
   selector: 'app-root',
@@ -17,8 +18,8 @@ export class AppComponent implements OnInit {
   title = 'app';
   count$: Observable<number>;
   todos$: Observable<any>;
-  currentTodo$: Observable<any>;
-  currentTodoId;
+  selectedTodo$: Observable<any>;
+  // selectedTodoId$: Observable<any>;
 
   constructor(private store: Store<any>) {
   }
@@ -27,9 +28,19 @@ export class AppComponent implements OnInit {
     this.count$ = this.store.select(getCount);
     this.todos$ = this.store.select(getTodos);
 
-    this.currentTodo$ = this.todos$
-      .map(todos => todos.filter(todo =>
-        todo.id == this.currentTodoId)[0]);
+    /**
+     * Manual less preferred method
+     */
+    // this.selectedTodoId$ = this.store.select(getSelectedTodoId);
+    // this.selectedTodo$ = this.todos$
+    //   .combineLatest(this.selectedTodoId$)
+    //   .map(([todos, selectedTodoId]) =>
+    //     todos.filter(todo => todo.id === selectedTodoId)[0]);
+
+    /**
+     * Preferred
+     */
+    this.selectedTodo$ = this.store.select(getSelectedTodo);
   }
 
   incrementCount() {
@@ -57,7 +68,7 @@ export class AppComponent implements OnInit {
     this.store.dispatch(removeTodo(id));
   }
 
-  setCurrentTodo(id) {
-    this.currentTodoId = id;
+  selectTodo(id) {
+    this.store.dispatch(selectTodo(id));
   }
 }

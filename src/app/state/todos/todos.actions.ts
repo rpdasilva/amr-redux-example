@@ -1,6 +1,6 @@
-import { ADD_TODO, REMOVE_TODO, COMPLETE_TODO } from './todos.types';
+import { ADD_TODO, REMOVE_TODO, COMPLETE_TODO, SELECT_TODO } from './todos.types';
 
-let id = 0;
+let id = 1;
 
 export function createTodo(title: string, description: string) {
   return { id: id++, title, description, isComplete: false };
@@ -23,6 +23,13 @@ export function removeTodo(id) {
 export function completeTodo(id) {
   return {
     type: COMPLETE_TODO,
+    payload: id
+  };
+}
+
+export function selectTodo(id) {
+  return {
+    type: SELECT_TODO,
     payload: id
   };
 }
